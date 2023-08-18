@@ -33,7 +33,7 @@ void setup() {
   display.display();
   delay(2000);
 
-  if (SDCARD_CS >  0) {
+  if (SDCARD_CS > 0) {
         display.clear();
         SPIClass sdSPI(VSPI);
         sdSPI.begin(SDCARD_SCLK, SDCARD_MISO, SDCARD_MOSI, SDCARD_CS);
