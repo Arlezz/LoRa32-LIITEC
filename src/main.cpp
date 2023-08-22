@@ -8,8 +8,10 @@
 
 OLED_CLASS_OBJ display(OLED_ADDRESS, OLED_SDA, OLED_SCL);
 
-#define WIFI_SSID       "Casa_EXT"
-#define WIFI_PASSWORD   "Um7uwD6JA7q"
+//#define WIFI_SSID       "Casa_EXT"
+//#define WIFI_PASSWORD   "Um7uwD6JA7q"
+#define WIFI_SSID       "ULS"
+#define WIFI_PASSWORD   "wifi@userena"
 
 void setup() {
   Serial.begin(115200);
