@@ -12,7 +12,7 @@ OLED_CLASS_OBJ display(OLED_ADDRESS, OLED_SDA, OLED_SCL);
 #define WIFI_PASSWORD   "Um7uwD6JA7q"
 
 void setup() {
-  Serial.begin( 115200);
+  Serial.begin(115200);
   while (!Serial);
 
   if (OLED_RST > 0) {
