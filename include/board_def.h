@@ -7,8 +7,8 @@
 #define LORA_V1_6_OLED  1
 #define LORA_V2_0_OLED  0
 
-#define LORA_SENDER 0
-// #define LORA_SENDER 1
+// #define LORA_SENDER 0
+#define LORA_SENDER 1
 
 #define LORA_PERIOD 868  
 // #define LORA_PERIOD 915     
