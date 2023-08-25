@@ -10,8 +10,8 @@
 // #define LORA_SENDER 0
 #define LORA_SENDER 1
 
-#define LORA_PERIOD 868  
-// #define LORA_PERIOD 915     
+//define LORA_PERIOD 868  
+ #define LORA_PERIOD 915     
 // #define LORA_PERIOD 433  
 
 #if LORA_V1_0_OLED

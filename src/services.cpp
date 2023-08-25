@@ -58,10 +58,10 @@ void services::setup_sd(){
 
 
 services::services()
-    : //ssid("Casa_EXT"),
-      //password("Um7uwD6JA7q"),
-      ssid("ULS"),
-      password("wifi@userena")
+    : ssid("Casa_EXT"),
+      password("Um7uwD6JA7q")
+      //ssid("ULS"),
+      //password("wifi@userena")
 {}
 
 void services::servicesSetup(){
