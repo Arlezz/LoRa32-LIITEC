@@ -5,7 +5,7 @@
    SDA = 21;
    SCL = 22;
 
-   Wire.begin(SDA, SCL);
+   //Wire.begin(SDA, SCL);
    bmp = new Adafruit_BMP280();
 
    if (!bmp->begin(0x76)) {

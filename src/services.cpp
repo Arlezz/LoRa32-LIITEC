@@ -1,106 +1,62 @@
 #include <services.h>
+#include <board_def.h>
 
-void setup_wifi(String ssid, String password) {
-    delay(10);
-    Serial.println();
-    Serial.print("Connecting to ");
-    Serial.println(ssid);
-
-    WiFi.begin(ssid, password);
-
-    while (WiFi.status() != WL_CONNECTED) {
-      delay(500);
-      Serial.print(".");
-    }
-
-    Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
-    Serial.println(WiFi.localIP());
-}
 
 void services::setup_display(){
-  if (OLED_RST > 0) {
-    pinMode(OLED_RST, OUTPUT);
-    digitalWrite(OLED_RST, HIGH);
-    delay(100);
-    digitalWrite(OLED_RST, LOW);
-    delay(100);
-    digitalWrite(OLED_RST, HIGH);
-  }
+
+  display = new Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RST);
   
-  display->init();
-  display->flipScreenVertically();
-  display->clear();
-  display->setFont(ArialMT_Plain_16);
-  display->setTextAlignment(TEXT_ALIGN_CENTER);
-  display->drawString(display->getWidth() / 2, display->getHeight() / 2, LORA_SENDER ? "LoRa Sender" : "LoRa Receiver");
-  display->display();
+  //reset OLED display via software
+  pinMode(OLED_RST, OUTPUT);
+  digitalWrite(OLED_RST, LOW);
+  delay(20);
+  digitalWrite(OLED_RST, HIGH);
+
+  //initialize OLED
+  Wire.begin(OLED_SDA, OLED_SCL);
+  if(!display->begin(SSD1306_SWITCHCAPVCC, 0x3c, false, false)) { // Address 0x3C for 128x32
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;); // Don't proceed, loop forever
+  }
   delay(2000); 
 }
 
-void services::setup_sd(){
-  if (SDCARD_CS >  0) {
-        display->clear();
-        SPIClass sdSPI(VSPI);
-        sdSPI.begin(SDCARD_SCLK, SDCARD_MISO, SDCARD_MOSI, SDCARD_CS);
-        if (!SD.begin(SDCARD_CS, sdSPI)) {
-            display->drawString(display->getWidth() / 2, display->getHeight() / 2, "SDCard  FAIL");
-        } else {
-            display->drawString(display->getWidth() / 2, display->getHeight() / 2 - 16, "SDCard  PASS");
-            uint32_t cardSize = SD.cardSize() / (1024 * 1024);
-            display->drawString(display->getWidth() / 2, display->getHeight() / 2, "Size: " + String(cardSize) + "MB");
-        }
-        display->display();
-        delay(2000);
-  }
+
+
+services::services(){
 }
-
-
-services::services()
-    : ssid("Casa_EXT"),
-      password("Um7uwD6JA7q")
-      //ssid("ULS"),
-      //password("wifi@userena")
-{}
 
 void services::servicesSetup(){
 
-  display = new OLED_CLASS_OBJ(OLED_ADDRESS, OLED_SDA, OLED_SCL);
-
   setup_display();
-  setup_sd();
 
-  String info = ds3231_test();
-  if (info != "") {
-    display->clear();
-    display->setFont(ArialMT_Plain_16);
-    display->setTextAlignment(TEXT_ALIGN_CENTER);
-    display->drawString(display->getWidth() / 2, display->getHeight() / 2, info);
-    display->display();
-    delay(2000);
-  }
+  display->clearDisplay();
+  display->setTextColor(WHITE);
+  display->setTextSize(1);
+  display->setCursor(0,0);
+  display->print("LORA SENDER ");
+  display->display();
+  
+  Serial.println("LoRa Sender Test");
 
-  setup_wifi(ssid,password);
-
-  SPI.begin(CONFIG_CLK, CONFIG_MISO, CONFIG_MOSI, CONFIG_NSS);
-  LoRa.setPins(CONFIG_NSS, CONFIG_RST, CONFIG_DIO0);
-
+  //SPI LoRa pins
+  SPI.begin(SCK, MISO, MOSI, SS);
+  //setup LoRa transceiver module
+  LoRa.setPins(SS, RST, DIO0);
+  
   if (!LoRa.begin(BAND)) {
-    Serial.println("Error al iniciar LoRa");
+    Serial.println("Starting LoRa failed!");
     while (1);
   }
-  if (!LORA_SENDER) {
-    display->clear();
-    display->drawString(display->getWidth() / 2, display->getHeight() / 3, "LoraRecv Ready\nListo para recibir");
-    display->display();
-  }else{
-    display->clear();
-    display->drawString(display->getWidth() / 2, display->getHeight() / 3, "LoraSend Ready\nListo para enviar");
-    display->display();
-  }
+  LoRa.setSyncWord(0xF3);           // ranges from 0-0xFF, default 0x34, see API docs
+  LoRa.setSpreadingFactor(7);  // Configura el Spreading Factor
+  LoRa.setTxPower(17);  // Configura la potencia de transmisión
 
-  Serial.println("LoRa iniciado correctamente");
+  Serial.println("LoRa Initializing OK!");
+  display->setCursor(0,10);
+  display->print("LoRa Initializing OK!");
+  display->display();
+  delay(2000);
 }
 
 

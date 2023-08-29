@@ -20,7 +20,7 @@ void DHT22Sensor::DHT22SensorLoop(){
 
     //String message = "dht22:"+String(t)+":"+String(h);
 
-    String jsonString = "{\"" + String(VARIABLE_TEMPERATURA) + "\":" + String(t) + ", \"" + String(VARIABLE_HUMEDAD) + "\":" + String(h) + "}";
+    //String jsonString = "{\"" + String(VARIABLE_TEMPERATURA) + "\":" + String(t) + ", \"" + String(VARIABLE_HUMEDAD) + "\":" + String(h) + "}";
 
     Serial.println("---------Sensor DHT22----------");
     Serial.print("Humedad: ");
