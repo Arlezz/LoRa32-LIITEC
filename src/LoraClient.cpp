@@ -1,8 +1,8 @@
-#include <services.h>
-#include <board_def.h>
+#include "LoraClient.h"
+#include "board_def.h"
 
 
-void services::setup_display(){
+void LoraClient::setup_display(){
 
   display = new Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RST);
   
@@ -22,11 +22,14 @@ void services::setup_display(){
 }
 
 
-
-services::services(){
+LoraClient::LoraClient() {
+    data = new std::string("");  // Inicialización del puntero aquí
+    // Resto de la inicialización si es necesario
 }
 
-void services::servicesSetup(){
+
+
+void LoraClient::LoraClientSetup(){
 
   setup_display();
 
@@ -60,8 +63,15 @@ void services::servicesSetup(){
 }
 
 
-void services::servicesLoop(){
+void LoraClient::LoraClientLoop(){
 
 }
+
+/*void LoraClient::LoraClientSender(String variable, String value){
+  String jsonString = "{\"" + variable + "\":" + value + "}";
+  LoRa.beginPacket();
+  LoRa.print(jsonString);
+  LoRa.endPacket();
+}*/
 
 

@@ -1,5 +1,7 @@
-#ifndef SERVICES_H
-#define SERVICES_H
+#ifndef LORACLIENT_H
+#define LORACLIENT_H
+
+#include <string.h>
 
 //Libraries for LoRa
 #include <SPI.h>
@@ -10,20 +12,20 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-//Libraries for sensors
-#include <bmp280Sensor.h>
-#include <DHT22Sensor.h>
 
-class services{
+class LoraClient{
     private:
-  
+
     public:
+        std::string* data;
         Adafruit_SSD1306* display;
-        services();
+        LoraClient();
+        //~LoraClient();
         void setup_display();
         void setup_sd();
-        void servicesSetup();
-        void servicesLoop();
+        void LoraClientSetup();
+        void LoraClientLoop();
+        void LoraClientSender(String variable, String value);
 
 };
 

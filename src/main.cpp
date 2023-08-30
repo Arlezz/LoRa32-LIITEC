@@ -1,42 +1,51 @@
-#include <Arduino.h>
-#include <services.h>
-//#include <bmp280Sensor.h>
-//#include <DHT22Sensor.h>
+#include "LoraClient.h"
+#include "bmp280Sensor.h"
+#include "DHT22Sensor.h"
 #include <LoRa.h>
 
-services service;
+LoraClient client;
+bmp280Sensor bmp280(&client);
+DHT22Sensor dht22(&client);
 int counter; 
 
 void setup() {
     Serial.begin(115200);
     while (!Serial);
-    service.servicesSetup();
-    counter = 0;
+    client.LoraClientSetup();
+    bmp280.bmp280SensorSetup();
+    dht22.DHT22SensorSetup();
 }
 
 void loop() {
-    Serial.print("Sending packet: ");
-    Serial.println(counter);
+    Serial.print("Sending packet: \n");
+    bmp280.bmp280SensorLoop();
+    dht22.DHT22SensorLoop();
+
+    Serial.print("\n*********** ENVIADO ****************** \n");
+    Serial.println(client.data->c_str());
+    Serial.print("\n******************************** \n");
+
 
     //Envio de paquete LoRa al receptor
     LoRa.beginPacket();
-    LoRa.print("Enviado ");
-    LoRa.print(counter);
+    LoRa.print(client.data->c_str());
     LoRa.endPacket();
 
-    service.display->clearDisplay();
-    service.display->setCursor(0,0);
-    service.display->println("LORA SENDER");
-    service.display->setCursor(0,20);
-    service.display->setTextSize(1);
-    service.display->print("LoRa packet sent.");
-    service.display->setCursor(0,30);
-    service.display->print("Counter:");
-    service.display->setCursor(50,30);
-    service.display->print(counter);
-    service.display->display();
+    client.display->clearDisplay();
+    client.display->setCursor(0,0);
+    client.display->println("LORA SENDER");
+    client.display->setCursor(0,15);
+    client.display->setTextSize(1);
+    client.display->print("LoRa packet sent.");
+    client.display->setCursor(0,25);
+    client.display->print(client.data->c_str());
+    client.display->display();
 
-    counter++;
+      // Liberar memoria ocupada por el std::string anterior
+    delete client.data;
 
-    delay(1000);
+    // Reasignar un nuevo std::string vacío al puntero data
+    client.data = new std::string();
+
+    delay(2000);
 }
