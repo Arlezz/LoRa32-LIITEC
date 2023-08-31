@@ -27,6 +27,18 @@ LoraClient::LoraClient() {
     // Resto de la inicialización si es necesario
 }
 
+std::string LoraClient::data_formatting(std::string* data) {
+    size_t found = data->find("$");  // Buscar la primera aparición de "$"
+
+    // Mientras se encuentre "$" en la cadena
+    while (found != std::string::npos) {
+        data->erase(found, 1);  // Borrar el carácter "$" encontrado
+        found = data->find("$", found);  // Buscar la siguiente aparición de "$" a partir de la posición actual
+    }
+
+    return *data;
+}
+
 
 
 void LoraClient::LoraClientSetup(){
@@ -66,12 +78,5 @@ void LoraClient::LoraClientSetup(){
 void LoraClient::LoraClientLoop(){
 
 }
-
-/*void LoraClient::LoraClientSender(String variable, String value){
-  String jsonString = "{\"" + variable + "\":" + value + "}";
-  LoRa.beginPacket();
-  LoRa.print(jsonString);
-  LoRa.endPacket();
-}*/
 
 

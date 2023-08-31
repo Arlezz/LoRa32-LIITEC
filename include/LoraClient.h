@@ -12,6 +12,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#include <string.h>
+
 
 class LoraClient{
     private:
@@ -22,11 +24,9 @@ class LoraClient{
         LoraClient();
         //~LoraClient();
         void setup_display();
-        void setup_sd();
+        std::string data_formatting(std::string*);
         void LoraClientSetup();
         void LoraClientLoop();
-        void LoraClientSender(String variable, String value);
-
 };
 
 #endif

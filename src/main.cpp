@@ -23,7 +23,7 @@ void loop() {
 
     Serial.print("\n*********** ENVIADO ****************** \n");
     Serial.println(client.data->c_str());
-    Serial.print("\n******************************** \n");
+    Serial.print("******************************** \n");
 
 
     //Envio de paquete LoRa al receptor
@@ -31,6 +31,11 @@ void loop() {
     LoRa.print(client.data->c_str());
     LoRa.endPacket();
 
+    
+    //Formateo de datos para mostrar en pantalla OLED
+    std::string data = client.data_formatting(client.data);
+    
+    //Mostrar en pantalla OLED
     client.display->clearDisplay();
     client.display->setCursor(0,0);
     client.display->println("LORA SENDER");
@@ -38,10 +43,10 @@ void loop() {
     client.display->setTextSize(1);
     client.display->print("LoRa packet sent.");
     client.display->setCursor(0,25);
-    client.display->print(client.data->c_str());
+    client.display->print(data.c_str());
     client.display->display();
 
-      // Liberar memoria ocupada por el std::string anterior
+    // Liberar memoria ocupada por el std::string anterior
     delete client.data;
 
     // Reasignar un nuevo std::string vacío al puntero data
