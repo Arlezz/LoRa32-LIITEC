@@ -5,7 +5,7 @@
 void LoraClient::setup_display(){
 
   display = new Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RST);
-  
+
   //reset OLED display via software
   pinMode(OLED_RST, OUTPUT);
   digitalWrite(OLED_RST, LOW);
@@ -19,15 +19,15 @@ void LoraClient::setup_display(){
     for(;;); // Don't proceed, loop forever
   }
   delay(2000); 
-}
+  }
 
 
-LoraClient::LoraClient() {
+  LoraClient::LoraClient() {
     data = new std::string("");  // Inicialización del puntero aquí
     // Resto de la inicialización si es necesario
-}
+  }
 
-std::string LoraClient::data_formatting(std::string* data) {
+  std::string LoraClient::data_formatting(std::string* data) {
     size_t found = data->find("$");  // Buscar la primera aparición de "$"
 
     // Mientras se encuentre "$" en la cadena
@@ -37,7 +37,7 @@ std::string LoraClient::data_formatting(std::string* data) {
     }
 
     return *data;
-}
+  }
 
 
 
@@ -51,14 +51,14 @@ void LoraClient::LoraClientSetup(){
   display->setCursor(0,0);
   display->print("LORA SENDER ");
   display->display();
-  
+
   Serial.println("LoRa Sender Test");
 
   //SPI LoRa pins
   SPI.begin(SCK, MISO, MOSI, SS);
   //setup LoRa transceiver module
   LoRa.setPins(SS, RST, DIO0);
-  
+
   if (!LoRa.begin(BAND)) {
     Serial.println("Starting LoRa failed!");
     while (1);
@@ -76,7 +76,4 @@ void LoraClient::LoraClientSetup(){
 
 
 void LoraClient::LoraClientLoop(){
-
 }
-
-
