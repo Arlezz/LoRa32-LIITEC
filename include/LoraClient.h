@@ -1,7 +1,7 @@
 #ifndef LORACLIENT_H
 #define LORACLIENT_H
 
-#include <string.h>
+#include <ArduinoJson.h>
 
 //Libraries for LoRa
 #include <SPI.h>
@@ -19,10 +19,9 @@ class LoraClient{
     private:
 
     public:
-        std::string* data;
+        DynamicJsonDocument* sensorData;
         Adafruit_SSD1306* display;
         LoraClient();
-        //~LoraClient();
         void setup_display();
         std::string data_formatting(std::string*);
         void LoraClientSetup();

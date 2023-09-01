@@ -5,7 +5,6 @@
 #include <Adafruit_BMP280.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
-#include <string.h>
 
 
 class bmp280Sensor{
@@ -17,7 +16,7 @@ class bmp280Sensor{
     public:
         bmp280Sensor(LoraClient*);
         void bmp280SensorSetup();
-        std::string bmp280SensorLoop();
+        void bmp280SensorLoop();
 };
 
 #endif

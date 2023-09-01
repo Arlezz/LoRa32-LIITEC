@@ -6,19 +6,19 @@
 #include <DHT_U.h>
 
 #include "LoraClient.h"
-#include <string.h>
+
+const size_t capacity = JSON_OBJECT_SIZE(1);
 
 class DHT22Sensor{
     private: //
         int DHTPIN;
         int DHTTYPE;
         DHT_Unified* dht;
-        //DHT* dht;
         LoraClient* client;
     public:
         DHT22Sensor(LoraClient*);
         void DHT22SensorSetup();
-        std::string DHT22SensorLoop();
+        void DHT22SensorLoop();
 };
 
 #endif

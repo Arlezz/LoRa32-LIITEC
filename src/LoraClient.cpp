@@ -19,25 +19,24 @@ void LoraClient::setup_display(){
     for(;;); // Don't proceed, loop forever
   }
   delay(2000); 
+}
+
+
+LoraClient::LoraClient() {
+  sensorData = new DynamicJsonDocument(1024);
+}
+
+std::string LoraClient::data_formatting(std::string* data) {
+  size_t found = data->find("$");  // Buscar la primera aparición de "$"
+
+  // Mientras se encuentre "$" en la cadena
+  while (found != std::string::npos) {
+      data->erase(found, 1);  // Borrar el carácter "$" encontrado
+      found = data->find("$", found);  // Buscar la siguiente aparición de "$" a partir de la posición actual
   }
 
-
-  LoraClient::LoraClient() {
-    data = new std::string("");  // Inicialización del puntero aquí
-    // Resto de la inicialización si es necesario
-  }
-
-  std::string LoraClient::data_formatting(std::string* data) {
-    size_t found = data->find("$");  // Buscar la primera aparición de "$"
-
-    // Mientras se encuentre "$" en la cadena
-    while (found != std::string::npos) {
-        data->erase(found, 1);  // Borrar el carácter "$" encontrado
-        found = data->find("$", found);  // Buscar la siguiente aparición de "$" a partir de la posición actual
-    }
-
-    return *data;
-  }
+  return *data;
+}
 
 
 

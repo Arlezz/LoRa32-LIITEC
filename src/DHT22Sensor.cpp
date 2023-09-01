@@ -13,7 +13,7 @@ void DHT22Sensor::DHT22SensorSetup(){
     dht->begin();
 }
 
-std::string DHT22Sensor::DHT22SensorLoop(){
+void DHT22Sensor::DHT22SensorLoop(){
 
     float humidity;
     float temperature;
@@ -50,13 +50,6 @@ std::string DHT22Sensor::DHT22SensorLoop(){
     Serial.print("°C");
     Serial.println();
 
-    client->data->append("H: ");
-    client->data->append(humidityFormatted);
-    client->data->append("%$\n");
-    client->data->append("Temp: ");
-    client->data->append(temperatureFormatted);
-    client->data->append(" *C$\n");
 
-
-    return *(client->data);
+    (*client->sensorData)["Humedad"] = humidityFormatted;
 }

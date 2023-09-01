@@ -2,6 +2,7 @@
 #include "bmp280Sensor.h"
 #include "DHT22Sensor.h"
 #include <LoRa.h>
+#include <ArduinoJson.h>
 
 LoraClient client;
 bmp280Sensor bmp280(&client);
@@ -21,19 +22,34 @@ void loop() {
     bmp280.bmp280SensorLoop();
     dht22.DHT22SensorLoop();
 
-    Serial.print("\n*********** ENVIADO ****************** \n");
-    Serial.println(client.data->c_str());
-    Serial.print("******************************** \n");
+    String json;
+    serializeJson((*client.sensorData), json);
 
+    Serial.print("\n*********** ENVIADO ****************** \n");
+    Serial.println(json.c_str());
+    Serial.print("******************************** \n");
 
     //Envio de paquete LoRa al receptor
     LoRa.beginPacket();
-    LoRa.print(client.data->c_str());
+    LoRa.print(json.c_str());
     LoRa.endPacket();
-
+    
     
     //Formateo de datos para mostrar en pantalla OLED
-    std::string data = client.data_formatting(client.data);
+    String dataDisplay = "";
+    dataDisplay += "Hum: ";
+    dataDisplay += (*client.sensorData)["Humedad"].as<String>();
+    dataDisplay += "%";
+    dataDisplay += "\nTem: ";
+    dataDisplay += (*client.sensorData)["Temperatura"].as<String>();
+    dataDisplay += "*C";
+    dataDisplay += "\nPre: ";
+    dataDisplay += (*client.sensorData)["Presion"].as<String>();
+    dataDisplay += " Pa";
+    dataDisplay += "\nAlt: ";
+    dataDisplay += (*client.sensorData)["Altitud"].as<String>();
+    dataDisplay += " m";
+
     
     //Mostrar en pantalla OLED
     client.display->clearDisplay();
@@ -43,14 +59,11 @@ void loop() {
     client.display->setTextSize(1);
     client.display->print("LoRa packet sent.");
     client.display->setCursor(0,25);
-    client.display->print(data.c_str());
+    client.display->print(dataDisplay.c_str());
     client.display->display();
 
-    // Liberar memoria ocupada por el std::string anterior
-    delete client.data;
-
-    // Reasignar un nuevo std::string vacío al puntero data
-    client.data = new std::string();
+    // Liberar memoria ocupada por el json anterior
+    client.sensorData->clear();
 
     delay(2000);
 }

@@ -24,7 +24,7 @@ void bmp280Sensor::bmp280SensorSetup(){
 
 }
 
-std::string bmp280Sensor::bmp280SensorLoop() {
+void bmp280Sensor::bmp280SensorLoop() {
     Serial.println("---------Sensor BM280----------");
     Serial.print(F("Temperatura = "));
     float temperature = bmp->readTemperature();
@@ -50,17 +50,10 @@ std::string bmp280Sensor::bmp280SensorLoop() {
     std::sprintf(pressureFormatted, "%.2f", pressure);
     std::sprintf(altitudeFormatted, "%.2f", altitude);
 
-    client->data->append("T: ");
-    client->data->append(temperatureFormatted);
-    client->data->append(" *C$\n");
-    client->data->append("P: ");
-    client->data->append(pressureFormatted);
-    client->data->append(" Pa$\n");
-    client->data->append("Alt: ");
-    client->data->append(altitudeFormatted);
-    client->data->append(" m$\n");
 
-    return *(client->data);
+    (*client->sensorData)["Temperatura"] = temperatureFormatted;
+    (*client->sensorData)["Presion"] = pressureFormatted;
+    (*client->sensorData)["Altitud"] = altitudeFormatted;
 }
 
 
