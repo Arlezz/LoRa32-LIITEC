@@ -13,6 +13,7 @@ class bmp280Sensor{
         int SCL;
         Adafruit_BMP280* bmp;
         LoraClient* client;
+        float altitudeSampling();
     public:
         bmp280Sensor(LoraClient*);
         void bmp280SensorSetup();
