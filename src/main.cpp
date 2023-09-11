@@ -1,13 +1,14 @@
 #include "LoraClient.h"
 #include "bmp280Sensor.h"
 #include "DHT22Sensor.h"
+#include "gyml8511Sensor.h"
 #include <LoRa.h>
 #include <ArduinoJson.h>
 
 LoraClient client;
 bmp280Sensor bmp280(&client);
 DHT22Sensor dht22(&client);
-int counter; 
+gyml8511Sensor gyml8511(&client);
 
 void setup() {
     Serial.begin(115200);
@@ -15,12 +16,14 @@ void setup() {
     client.LoraClientSetup();
     bmp280.bmp280SensorSetup();
     dht22.DHT22SensorSetup();
+    gyml8511.gyml8511SensorSetup();
 }
 
 void loop() {
     Serial.print("Sending packet: \n");
     bmp280.bmp280SensorLoop();
     dht22.DHT22SensorLoop();
+    gyml8511.gyml8511SensorLoop();
 
     String json;
     serializeJson((*client.sensorData), json);
@@ -49,6 +52,9 @@ void loop() {
     dataDisplay += "\nAlt: ";
     dataDisplay += (*client.sensorData)["Altitud"].as<String>();
     dataDisplay += " m";
+    dataDisplay += "\nUV: ";
+    dataDisplay += (*client.sensorData)["UV"].as<String>();
+    dataDisplay += " mW/cm^2";
 
     
     //Mostrar en pantalla OLED
